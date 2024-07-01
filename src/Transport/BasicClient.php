@@ -32,7 +32,7 @@ class BasicClient
         ];
 
         $context = stream_context_create($opts);
-        var_dump($context);
+
         $response = @file_get_contents($url, false, $context);
 
         if ($response === false) {

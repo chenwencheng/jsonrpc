@@ -77,6 +77,8 @@ class Client
 
     protected $sk;
 
+    protected $timeout = 3;
+
     public function __construct($url, $transport = null)
     {
         $this->url = $url;
@@ -168,6 +170,12 @@ class Client
         return $this->outputData;
     }
 
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
+
     public function getResult()
     {
         return $this->outputData['result'] ?? null;
@@ -224,7 +232,7 @@ class Client
             $data = $this->requests[0];
         }
         try {
-            if ($res = $this->transport->send('POST', $this->url, $data, $this->headers)) {
+            if ($res = $this->transport->setTimeout($this->timeout)->send('POST', $this->url, $data, $this->headers)) {
                 $this->output = $this->transport->output;
                 $this->outputData = json_decode($this->output, true);
                 $res = $this->checkResult();

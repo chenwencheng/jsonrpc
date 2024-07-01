@@ -1,16 +1,19 @@
 <?php
-
-declare(strict_types=1);
-
 namespace Qifei\JsonRpc\Transport;
-
-use Hyperf\Validation\Contract\ValidatorAwareRule;
 
 class BasicClient
 {
     public $output = '';
 
     public $error = '';
+
+    protected $timeout = 3;
+
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+        return $this;
+    }
 
     public function send($method, $url, $json, $headers = [])
     {
@@ -28,6 +31,7 @@ class BasicClient
                 'method' => $method,
                 'header' => implode("\r\n", $headers),
                 'content' => $json,
+                'timeout' => $this->timeout,
             ],
         ];
 
